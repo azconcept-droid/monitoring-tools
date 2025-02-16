@@ -1,0 +1,22 @@
+services:
+  python-app:
+    build: ./python-app/app
+    container_name: python-app
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - DD_AGENT_HOST=datadog
+      - DD_ENV=development
+      - DD_SERVICE=python-app
+      - DD_LOGS_INJECTION=true
+    labels:
+      com.datadoghq.logs: "true"  # Enable logs collection for this container
+      com.datadoghq.logs.source: "python"  # Tag logs with the source type
+      com.datadoghq.logs.service: "python-app"  # Identify the service in Datadog
+    networks:
+      - datadog-network
+
+networks:
+  datadog-network:
+    driver: bridge
